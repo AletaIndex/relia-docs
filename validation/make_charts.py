@@ -163,8 +163,9 @@ def chart_cost():
     gem = price_in["Gemini 2.5 Flash"] * tok_millions     # 0.54
     mini = price_in["GPT-4o mini"] * tok_millions         # 0.27
     dsk = price_in["DeepSeek-V4 Flash"] * tok_millions    # 0.252
-    # Relia API: $1 / 1,000 requests, up to 100 articles/request => $0.01 / 1,000 articles
-    relia = 0.01
+    # Relia API: $1 / 1,000 requests, up to 50 articles/request => $0.02 / 1,000 articles
+    # (batched 50/request; a caller sending 1 article/request pays $1.00 / 1,000 articles)
+    relia = 0.02
 
     labels = ["Claude Sonnet 4", "GPT-4o", "Gemini 2.5 Flash", "GPT-4o mini",
               "DeepSeek-V4 Flash", "Relia API"]
@@ -183,7 +184,7 @@ def chart_cost():
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylabel("Cost to score 1,000 articles (USD)")
     ax.set_title("Scoring articles yourself with LLM APIs vs the Relia API\n"
-                 "(current published input-token list prices · ~1.8K input tokens/article)",
+                 "(published input-token list prices · ~1.8K tokens/article · Relia batched 50 articles/request)",
                  fontweight="bold")
     ax.set_ylim(0, max(vals) * 1.18)
     fig.tight_layout()

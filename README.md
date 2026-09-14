@@ -95,7 +95,7 @@ Full API reference: [`docs/API.md`](docs/API.md).
 
 ## Pricing & rate limits
 
-- **$1 per 1,000 requests** — 1 request = 1 entity + up to 100 articles.
+- **$1 per 1,000 requests** — 1 request = 1 entity + up to 50 articles.
 - **First 2,000 requests free**, no time limit.
 - **120 requests / minute** per API key.
 

@@ -7,7 +7,7 @@ Relia is billed per request — simple and predictable.
 | | |
 |---|---|
 | **Price** | **$1 / 1,000 requests** |
-| **What's a request?** | 1 request = 1 entity + up to **100 articles**. No token chunking — long articles count as one. |
+| **What's a request?** | 1 request = 1 entity + up to **50 articles**. No token chunking — long articles count as one. |
 | **Free tier** | **2,000 requests free** — no time limit, no monthly reset. |
 | **After the free tier** | Top up anytime, prepaid. You only pay for what you use. |
 
@@ -19,9 +19,9 @@ with a `Retry-After` header indicating the seconds until the window resets.
 | Limit | Value |
 |---|---|
 | Requests / minute | 120 |
-| Articles / request | 100 |
+| Articles / request | 50 |
 
-- Batch multiple articles in a single `POST /v1/score` (up to 100) — it's both faster and
+- Batch multiple articles in a single `POST /v1/score` (up to 50) — it's both faster and
   counts as one request against the per-minute limit.
 - Need higher limits or volume pricing? [Contact the team](mailto:info@aletaindex.com).
 
