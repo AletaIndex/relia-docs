@@ -183,9 +183,7 @@ def chart_cost():
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylabel("Cost to process 1M tokens' worth of articles (USD)")
     ax.set_title("Scoring articles yourself with LLM APIs vs the Relia API\n"
-                 f"(published USD/1M-input-token list prices · 1M tokens ≈ {articles_per_1M_tokens:.0f} articles at "
-                 f"~{TOKENS_PER_ARTICLE} tokens/article · Relia billed USD{RELIA_PRICE_PER_CALL}/call, "
-                 f"up to {RELIA_ARTICLES_PER_CALL} articles/call)",
+                 f"(published USD/1M tokens · 1M tokens ≈ {articles_per_1M_tokens:.0f} articles · Relia: USD{RELIA_PRICE_PER_CALL}/call)",
                  fontweight="bold")
     ax.set_ylim(0, max(vals) * 1.18)
     fig.tight_layout()
