@@ -8,7 +8,7 @@ Relia is billed per call — simple and predictable.
 |---|---|
 | **Price** | **$0.0025 / call** |
 | **What's a call?** | 1 call = 1 entity + up to **50 articles**. No token chunking — long articles count as one. |
-| **Free tier** | **2,000 calls free** — no time limit, no monthly reset. |
+| **Free tier** | **500 calls free** — no time limit, no monthly reset. |
 | **After the free tier** | Top up anytime, prepaid. You only pay for what you use. |
 
 ## Rate limits

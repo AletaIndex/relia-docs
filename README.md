@@ -19,7 +19,7 @@ cumulative-link ordinal head.
 |---|---|---|
 | **Accuracy** | 86.5% exact / **100% within-1-bin** agreement with a 3-LLM consensus | 88–90.5% (the ceiling) |
 | **Speed** | **~18 ms/article** batched (measured) | ~1.8 s per article, per API call |
-| **Cost** | **$0.0025 / call** (up to 50 articles/call, first 2,000 free), no per-token metering | per-token billing, every call |
+| **Cost** | **$0.0025 / call** (up to 50 articles/call, first 500 free), no per-token metering | per-token billing, every call |
 | **Dependencies** | one call to one model | an API round-trip (or three, for a consensus) |
 
 The striking part: **Relia agrees with the LLM consensus (86.5%) more than the LLMs
@@ -96,7 +96,7 @@ Full API reference: [`docs/API.md`](docs/API.md).
 ## Pricing & rate limits
 
 - **$0.0025 per call** — 1 call = 1 entity + up to 50 articles.
-- **First 2,000 requests free**, no time limit.
+- **First 500 requests free**, no time limit.
 - **120 requests / minute** per API key.
 
 [Get your API key](https://aletaindex-narrative.com). Full pricing and limits in
