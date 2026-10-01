@@ -144,47 +144,48 @@ def chart_speed():
 
 
 # --------------------------------------------------------------------------- #
-# 4. Cost — $ per 1,000 articles                                              #
+# 4. Cost — $ to process 1M input tokens' worth of articles                   #
 # --------------------------------------------------------------------------- #
 def chart_cost():
-    # $ to score 1,000 articles. ~1.8K input tokens/article => 1.8M input tokens per
-    # 1,000 articles. LLM figures = current published INPUT-token list prices, verified
-    # 2026-07 (anthropic.com, openai.com, ai.google.dev, api-docs.deepseek.com).
-    tok_millions = 1.8
-    price_in = {  # $ / 1M input tokens
+    # Single source of truth for Relia's own price — everything else in this
+    # function is derived from these two numbers. LLM figures are each
+    # provider's own published $/1M-input-token list price (not derived —
+    # that unit is their native billing unit), verified 2026-07 (anthropic.com,
+    # openai.com, ai.google.dev, api-docs.deepseek.com).
+    RELIA_PRICE_PER_CALL = 0.0025
+    RELIA_ARTICLES_PER_CALL = 50
+    TOKENS_PER_ARTICLE = 1800
+
+    price_in = {  # $ / 1M input tokens — each provider's own billing unit, used as-is
         "Claude Sonnet 4": 3.00,
         "GPT-4o": 2.50,
         "Gemini 2.5 Flash": 0.30,
         "GPT-4o mini": 0.15,
         "DeepSeek-V4 Flash": 0.14,
     }
-    sonnet = price_in["Claude Sonnet 4"] * tok_millions   # 5.40
-    gpt4o = price_in["GPT-4o"] * tok_millions             # 4.50
-    gem = price_in["Gemini 2.5 Flash"] * tok_millions     # 0.54
-    mini = price_in["GPT-4o mini"] * tok_millions         # 0.27
-    dsk = price_in["DeepSeek-V4 Flash"] * tok_millions    # 0.252
-    # Relia API: $1 / 1,000 requests, up to 50 articles/request => $0.02 / 1,000 articles
-    # (batched 50/request; a caller sending 1 article/request pays $1.00 / 1,000 articles)
-    relia = 0.02
+    articles_per_1M_tokens = 1_000_000 / TOKENS_PER_ARTICLE  # ~556
+    # What it costs Relia to process that same ~556 articles, derived from the
+    # two numbers above — never hand-edit this value directly.
+    relia = (articles_per_1M_tokens / RELIA_ARTICLES_PER_CALL) * RELIA_PRICE_PER_CALL
 
-    labels = ["Claude Sonnet 4", "GPT-4o", "Gemini 2.5 Flash", "GPT-4o mini",
-              "DeepSeek-V4 Flash", "Relia API"]
-    vals = [sonnet, gpt4o, gem, mini, dsk, relia]
-    colors = [LLM, LLM, LLM, LLM, LLM, RELIA]
+    labels = list(price_in.keys()) + ["Relia API"]
+    vals = list(price_in.values()) + [relia]
+    colors = [LLM] * len(price_in) + [RELIA]
 
     fig, ax = plt.subplots(figsize=FIGSIZE)
     x = np.arange(len(labels))
     bars = ax.bar(x, vals, color=colors, width=0.62)
-    texts = [f"${sonnet:.2f}", f"${gpt4o:.2f}", f"${gem:.2f}", f"${mini:.2f}",
-             f"${dsk:.2f}", f"${relia:.2f}"]
+    texts = [f"${v:.2f}" if v >= 0.10 else f"${v:.3f}" for v in vals]
     for b, t in zip(bars, texts):
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 0.12, t,
                 ha="center", fontweight="bold", fontsize=9)
     ax.set_xticks(x)
     ax.set_xticklabels(labels, fontsize=9)
-    ax.set_ylabel("Cost to score 1,000 articles (USD)")
+    ax.set_ylabel("Cost to process 1M tokens' worth of articles (USD)")
     ax.set_title("Scoring articles yourself with LLM APIs vs the Relia API\n"
-                 "(published input-token list prices · ~1.8K tokens/article · Relia batched 50 articles/request)",
+                 f"(published USD/1M-input-token list prices · 1M tokens ≈ {articles_per_1M_tokens:.0f} articles at "
+                 f"~{TOKENS_PER_ARTICLE} tokens/article · Relia billed USD{RELIA_PRICE_PER_CALL}/call, "
+                 f"up to {RELIA_ARTICLES_PER_CALL} articles/call)",
                  fontweight="bold")
     ax.set_ylim(0, max(vals) * 1.18)
     fig.tight_layout()
